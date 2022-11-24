@@ -1,0 +1,23 @@
+rootProject.name = 'proof-of-liabilities'
+
+// returns module path and name both calculated from settings.gradle file
+Closure<Map<String, String>> module = { String dir, File settings ->
+    ConfigObject s = new ConfigSlurper().parse(settings.toURI().toURL())
+
+    return [file: settings.getParentFile(), name: ":${s.rootProject ? s.rootProject.name : settings.getParentFile().getName()}"]
+}
+
+// performs the inclusion of all projects with settings.gradle file
+Closure<Void> include = { String dir ->
+    FileTree tree = fileTree(dir: dir)
+    tree.include '**/settings.gradle'
+
+    tree.each { File f ->
+        Map<String, String> m = module(dir, f)
+        include m.name
+        project(m.name).projectDir = m.file
+    }
+}
+
+// include src folder
+include('src')

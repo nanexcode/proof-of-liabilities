@@ -1,0 +1,29 @@
+group 'org.pol'
+
+apply plugin: 'java-library'
+apply plugin: 'java'
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+jar { enabled = true }
+
+dependencies {
+    implementation 'ch.qos.logback:logback-core:1.2.3'
+    implementation 'ch.qos.logback:logback-classic:1.2.3'
+    implementation 'org.slf4j:slf4j-api:1.7.30'
+    implementation 'org.graphstream:gs-core:2.0'
+    implementation 'org.graphstream:gs-algo:2.0'
+    implementation 'org.graphstream:gs-ui-swing:2.0'
+    compile 'com.google.guava:guava:31.1-jre'
+
+    testImplementation 'junit:junit:4.13.1'
+}
+
+test {
+    minHeapSize = "2048m" // initial heap size
+    maxHeapSize = "16384m" // maximum heap size
+    jvmArgs '-XX:MaxPermSize=256m' // mem argument for the test JVM
+}
